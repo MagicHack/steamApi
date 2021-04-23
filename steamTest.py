@@ -18,6 +18,7 @@ def getLastFileUpdate():
   return -1
 
 def readGameFile():
+  global data
   with open(jsonGameFile) as f:
     data = json.load(f)
     f.close()
