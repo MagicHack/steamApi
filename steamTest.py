@@ -1,11 +1,35 @@
 import json
 import sys
 from fuzzywuzzy import fuzz
+import pathlib
+import time
+import subprocess
 
-with open('steam.json') as f:
-  data = json.load(f)
-  f.close()
-# print(data["applist"]["apps"])
+jsonGameFile = 'steam.json'
+data = None
+
+def readGameFile():
+  with open(jsonGameFile) as f:
+    data = json.load(f)
+    f.close()
+
+def updateSteamFile():
+  # TODO implement in python instead of calling script
+  subprocess.call(["./updateSteamGames.sh"])
+
+def checkUpdateGameData():
+  updateFrequency = 12 * 60 * 60 # How often to refresh the json in seconds
+  file = pathlib.Path(jsonGameFile)
+  if file.exists():
+    timeSinceLastUpdate = time.time() - file.stat().st_mtime
+    if timeSinceLastUpdate > updateFrequency:
+      print("Updating file, last update {} hours ago".format(timeSinceLastUpdate/60/60))
+      updateSteamFile()
+      readGameFile()
+  else:
+    print("json not found, fetching it")
+    updateSteamFile()
+    readGameFile()
 
 def findName(appid):
   for app in data["applist"]["apps"]:
@@ -14,6 +38,8 @@ def findName(appid):
   return "Error : game not found"
 
 def findAppId(name):
+  checkUpdateGameData()
+  readGameFile()
   bestMatchName = ""
   bestMatch = -1
   bestRatio = 0
@@ -36,3 +62,5 @@ def findAppId(name):
 # while True:
 #   name = input("App name to search for: ")
 #   findAppId(name)
+
+checkUpdateGameData()
