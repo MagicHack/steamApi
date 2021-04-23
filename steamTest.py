@@ -11,6 +11,12 @@ data = None
 
 steamGameListUrl = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
 
+def getLastFileUpdate():
+  file = pathlib.Path(jsonGameFile)
+  if file.exists():
+    return round(time.time() - file.stat().st_mtime)
+  return -1
+
 def readGameFile():
   with open(jsonGameFile) as f:
     data = json.load(f)

@@ -1,8 +1,9 @@
 from flask import Flask
 from flask import request
 import json
-from steamTest import findAppId, findName
+from steamTest import findAppId, findName, getLastFileUpdate
 import urllib.request
+import time
 
 
 app = Flask(__name__)
@@ -11,6 +12,16 @@ app = Flask(__name__)
 def hello():
     return "<h1>Hello There! Work in progress :)</h1>"
 
+@app.route('/steam/lastupdate')
+def lastUpdate():
+    timeSeconds = getLastFileUpdate()
+
+    format = request.args.get('format', default = 's', type = str)
+
+    if format != "s":
+        return time.strftime(format.replace('$', '%'), time.gmtime(timeSeconds))
+    else:
+       return str(timeSeconds)
 @app.route('/steam/players/pajbot/<string:gameName>')
 def playersText(gameName):
     numberSeparator = ',' # '\xa0' twitch seems to remove non breaking spaces Sadge
