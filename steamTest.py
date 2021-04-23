@@ -4,9 +4,12 @@ from fuzzywuzzy import fuzz
 import pathlib
 import time
 import subprocess
+import urllib.request
 
 jsonGameFile = 'steam.json'
 data = None
+
+steamGameListUrl = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
 
 def readGameFile():
   with open(jsonGameFile) as f:
@@ -14,8 +17,7 @@ def readGameFile():
     f.close()
 
 def updateSteamFile():
-  # TODO implement in python instead of calling script
-  subprocess.call(["./updateSteamGames.sh"])
+  urllib.request.urlretrieve (steamGameListUrl, "steam.json")
 
 def checkUpdateGameData():
   updateFrequency = 12 * 60 * 60 # How often to refresh the json in seconds
