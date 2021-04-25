@@ -22,6 +22,7 @@ def lastUpdate():
         return time.strftime(format.replace('$', '%'), time.gmtime(timeSeconds))
     else:
        return str(timeSeconds)
+
 @app.route('/steam/players/pajbot/<string:gameName>')
 def playersText(gameName):
     numberSeparator = ',' # '\xa0' twitch seems to remove non breaking spaces Sadge
@@ -32,7 +33,10 @@ def playersText(gameName):
     except Exception as ex:
         return str(ex)
     playersOnline = json.loads(response.read())["response"]["player_count"]
-    return "The game {} currently has {} players online. https://steamcharts.com/app/{}/".format(game["name"], f"{playersOnline:,}".replace(',', numberSeparator), game["appid"])
+    playerString = "player"
+    if playersOnline != 1:
+        playerString += "s"
+    return "The game {0} currently has {1} {2} online. https://steamdb.info/app/{3}/graphs".format(game["name"], f"{playersOnline:,}".replace(',', numberSeparator), playerString, game["appid"])
 
 @app.route('/steam/players/<int:appid>')
 def playersOnline(appid):
