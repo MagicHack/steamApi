@@ -72,5 +72,17 @@ def steam(gameName):
         else:
             return jsonResponse
 
+@app.route('/repeat/<string:text>/<int:number>')
+def repeat(text, number):
+    repeats = 0
+    if number > 1000:
+        repeats = 1000
+    elif number < 0:
+        repeats = 0
+    else:
+        repeats = number
+
+    return text * repeats
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
