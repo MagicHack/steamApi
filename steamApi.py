@@ -43,7 +43,6 @@ def playersText(gameName):
         if playersOnline != 1:
             playerString += "s"
         res = "The game {0} currently has {1} {2} online. https://steamdb.info/app/{3}/graphs".format(game["name"], f"{playersOnline:,}".replace(',', numberSeparator), playerString, game["appid"])
-        res += " (Match score {0}%)".format(game["matchscore"])
     else:
         res = "Found game {0} https://steamdb.info/app/{1} but did not get a player count from steam Sadge".format(game["name"], game["appid"])
     res += " (Match score {0}%)".format(game["matchscore"])
