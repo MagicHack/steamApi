@@ -28,18 +28,26 @@ def playersText(gameName):
     numberSeparator = ',' # '\xa0' twitch seems to remove non breaking spaces Sadge
     game = json.loads(findAppId(gameName))
     steamApiUrl = "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid="
+    error = False
+    res = ""
+    print("Querying appid {}".format(game["appid"]))
     try:
         response = urllib.request.urlopen(steamApiUrl + str(game["appid"]))
     except Exception as ex:
-        return str(ex)
-    playersOnline = json.loads(response.read())["response"]["player_count"]
-    playerString = "player"
-    if playersOnline != 1:
-        playerString += "s"
-    response = "The game {0} currently has {1} {2} online. https://steamdb.info/app/{3}/graphs".format(game["name"], f"{playersOnline:,}".replace(',', numberSeparator), playerString, game["appid"])
-    response += " (Match score {0}%)".format(game["matchscore"])
-    return response
-
+        print(ex)
+        error = True
+        response = str(ex)
+    if not error:
+        playersOnline = json.loads(response.read())["response"]["player_count"]
+        playerString = "player"
+        if playersOnline != 1:
+            playerString += "s"
+        res = "The game {0} currently has {1} {2} online. https://steamdb.info/app/{3}/graphs".format(game["name"], f"{playersOnline:,}".replace(',', numberSeparator), playerString, game["appid"])
+        res += " (Match score {0}%)".format(game["matchscore"])
+    else:
+        res = "Found game {0} https://steamdb.info/app/{1} but did not get a player count from steam Sadge".format(game["name"], game["appid"])
+    res += " (Match score {0}%)".format(game["matchscore"])
+    return res
 @app.route('/steam/players/<int:appid>')
 def playersOnline(appid):
     steamApiUrl = "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid="
