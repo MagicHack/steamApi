@@ -9,7 +9,7 @@ import urllib.request
 jsonGameFile = 'steam.json'
 data = None
 
-steamGameListUrl = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
+steamGameListUrl = "http://api.steampowered.com/ISteamApps/GetAppList/v0002/"
 
 def getLastFileUpdate():
   file = pathlib.Path(jsonGameFile)
@@ -24,6 +24,9 @@ def readGameFile():
     f.close()
 
 def updateSteamFile():
+  opener = urllib.request.build_opener()
+  opener.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.67')]
+  urllib.request.install_opener(opener)
   urllib.request.urlretrieve (steamGameListUrl, "steam.json")
 
 def checkUpdateGameData():
