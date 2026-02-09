@@ -27,12 +27,14 @@ def read_game_file():
 
 
 def update_steam_file():
-    opener = urllib.request.build_opener()
-    opener.addheaders = [('User-agent',
-                          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.67')]
-    urllib.request.install_opener(opener)
-    urllib.request.urlretrieve(steamGameListUrl, "steam.json")
+    print("Skipping game file update since api no longer exists, need to use the one the authenticated and paginated version")
+    return
+    # opener = urllib.request.build_opener()
+    # opener.addheaders = [('User-agent',
+    #                       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+    #                       'Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.67')]
+    # urllib.request.install_opener(opener)
+    # urllib.request.urlretrieve(steamGameListUrl, "steam.json")
 
 
 def check_update_game_data():

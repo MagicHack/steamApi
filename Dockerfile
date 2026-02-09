@@ -31,9 +31,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
     
 # kinda hacky to force download of file since we check last update
-RUN touch -d "24 hours ago" steam.json && \
-    chown appuser:appuser steam.json
-
+#RUN touch -d "24 hours ago" steam.json && \
+#    chown appuser:appuser steam.json
+COPY steam.json .
 # Switch to the non-privileged user to run the application.
 USER appuser
 
